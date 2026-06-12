@@ -1,0 +1,73 @@
+/* Blood of the World — Codex · the one design-token file (§6, §7c).
+ *
+ * This is the single source of truth for colour and type across the WHOLE app —
+ * the shell, the four rebuilt features (sheet / calendar / deeds / notes) and the
+ * atlas. It is imported once, app-wide, from routes/+layout.svelte, so every
+ * route inherits it. Components reference these tokens; they never hard-code a
+ * colour or a font-family.
+ *
+ * Two layers live here:
+ *   1. CANONICAL TOKENS — the §6 names. The real values. Edit colours/fonts here
+ *      and the change lands everywhere.
+ *   2. LEGACY ALIASES — thin pointers from the three older naming dialects that
+ *      were already in the tree onto the canonical names, so existing references
+ *      keep resolving without rewriting every file at once (§7c). New code should
+ *      use the canonical names; the aliases are a compatibility shim.
+ *
+ * NOTE: the atlas keeps its OWN map-specific tokens (--region-*, --sector-*,
+ * --map-bg, --sheet-bg, --safe-bottom) in src/lib/features/atlas/app.css — those
+ * are atlas-domain, not global, so they do not belong here. Only the duplicate
+ * GLOBAL palette that used to sit in that file folded up into this one.
+ */
+
+:root {
+  /* ───────────────────────── 1 · CANONICAL TOKENS (§6) ───────────────────── */
+
+  /* Fonts — four, each with one job.
+   * Cinzel + EB Garamond are loaded in src/app.html; --font-ui and --font-data
+   * are CSS-only (system stacks, no web font). Typography rule of thumb: serif
+   * (--font-display / --font-body) only at >=16px; everything smaller uses
+   * --font-ui, and all numbers use --font-data. */
+  --font-display: 'Cinzel', serif;                  /* section/entity titles, the brand */
+  --font-body: 'EB Garamond', Georgia, serif;       /* lore, descriptions, prose — set at 500 weight */
+  --font-ui: system-ui, 'Segoe UI', sans-serif;     /* buttons, labels, nav, all small UI text */
+  --font-data: ui-monospace, 'JetBrains Mono', monospace; /* skill %, weights, counters, dice, AP, badges */
+
+  /* Core palette (dark) — base ground + layered panels + text. */
+  --bg: #0a0a0f;          /* base ground (the shell paints a faint radial glow + grain over this) */
+  --panel: #101017;       /* panel surface */
+  --panel-2: #15151d;     /* nested panel */
+  --panel-3: #1e1e24;     /* deeper nested panel */
+  --border: #2a2a32;      /* hairline dividers / panel edges */
+  --text: #e8e3d6;        /* primary text */
+  --text-muted: #8e8e9f;  /* secondary / muted text */
+
+  /* Accents (fixed meanings). */
+  --gold: #d97706;        /* identity / favor / admin-positive */
+  --gold-bright: #d4af37; /* brighter gold — titles, highlights */
+  --blood: #991b1b;       /* danger / destructive / the "blood" theme */
+  --crimson: #c01f2f;     /* sharper danger / destructive */
+  --taint: #7c3aed;       /* magic / atlas / secondary */
+  --blue: #0369a1;        /* info / notes */
+  --green: #166534;       /* success */
+
+  /* ───────────────────────── 2 · LEGACY ALIASES (§7c) ────────────────────── */
+  /* Old dialect names → canonical. Deliberate, one-to-one. Keeps the build green
+   * while the tree migrates to the canonical names over time. */
+
+  /* shell + features dialect */
+  --muted: var(--text-muted);
+
+  /* feature-component dialect (sheet / calendar / deeds / notes) */
+  --accent-gold: var(--gold);
+  --accent-blood: var(--blood);
+  --accent-blue: var(--blue);
+  --accent-green: var(--green);
+  --accent-taint: var(--taint);
+
+  /* atlas dialect (the globals that used to live in atlas/app.css :root) */
+  --text-main: var(--text);
+  --border-color: var(--border);
+  --bg-main: var(--bg);
+  --void: #0c0c11; /* atlas input/void surface — no canonical equivalent; preserved verbatim */
+}

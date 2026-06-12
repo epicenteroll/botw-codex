@@ -1,0 +1,325 @@
+{
+  "_about": "Blood of the World — encyclopedia seed. Single source of truth for the standalone prototype (Stage 1). Coordinates are in a 1000x700 viewBox per map. Quadrant/sector shapes are generated as organic blobs from blob_center/blob_r at render time (no geometric shapes).",
+
+  "locationTypes": [
+    { "id": "settlement", "display_name": "Settlement", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-settlement" },
+    { "id": "city", "display_name": "City", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-city" },
+    { "id": "oasis_town", "display_name": "Oasis Town", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-oasis_town" },
+    { "id": "walled_oasis", "display_name": "Walled Oasis", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-walled_oasis" },
+    { "id": "camp", "display_name": "Camp", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-camp" },
+    { "id": "gate_town", "display_name": "Gate-Town", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-gate_town" },
+    { "id": "tribal_encampment", "display_name": "Tribal Encampment", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-tribal_encampment" },
+    { "id": "rancho_holdfast", "display_name": "Rancho Holdfast", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-rancho_holdfast" },
+    { "id": "waystation", "display_name": "Waystation", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-waystation" },
+    { "id": "outlaw_den", "display_name": "Outlaw Den", "category": "Settlements & Habitation", "marker_colour": "#d4af37", "icon_ref": "icon-outlaw_den" },
+
+    { "id": "ruins", "display_name": "Ruins", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-ruins" },
+    { "id": "ancient_structure", "display_name": "Ancient Structure", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-ancient_structure" },
+    { "id": "buried_facility", "display_name": "Buried Facility", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-buried_facility" },
+    { "id": "tower", "display_name": "Tower", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-tower" },
+    { "id": "aqueduct", "display_name": "Aqueduct", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-aqueduct" },
+    { "id": "wall_section", "display_name": "Wall Section", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-wall_section" },
+    { "id": "tomb", "display_name": "Tomb/Crypt", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-tomb" },
+    { "id": "monument", "display_name": "Monument", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-monument" },
+    { "id": "collapsed_site", "display_name": "Collapsed Site", "category": "Ruins & Ancient Structures", "marker_colour": "#9a9aa3", "icon_ref": "icon-collapsed_site" },
+
+    { "id": "cave", "display_name": "Cave", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-cave" },
+    { "id": "cavern_system", "display_name": "Cavern System", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-cavern_system" },
+    { "id": "canyon", "display_name": "Canyon/Gully", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-canyon" },
+    { "id": "dune_field", "display_name": "Dune Field", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-dune_field" },
+    { "id": "salt_flat", "display_name": "Salt Flat", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-salt_flat" },
+    { "id": "spire_grove", "display_name": "Spire Grove", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-spire_grove" },
+    { "id": "mountain_pass", "display_name": "Mountain Pass", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-mountain_pass" },
+    { "id": "plateau", "display_name": "Plateau", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-plateau" },
+    { "id": "bone_field", "display_name": "Bone Field", "category": "Natural Features", "marker_colour": "#c0915a", "icon_ref": "icon-bone_field" },
+
+    { "id": "oasis", "display_name": "Oasis", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-oasis" },
+    { "id": "underground_river", "display_name": "Underground River", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-underground_river" },
+    { "id": "well", "display_name": "Well/Spring", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-well" },
+    { "id": "dam", "display_name": "Dam/Cistern", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-dam" },
+    { "id": "mine", "display_name": "Mine", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-mine" },
+    { "id": "scrap_field", "display_name": "Scrap Field", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-scrap_field" },
+    { "id": "vein_deposit", "display_name": "Vein Deposit", "category": "Water & Resources", "marker_colour": "#2bb0bf", "icon_ref": "icon-vein_deposit" },
+
+    { "id": "monster_lair", "display_name": "Monster Lair", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-monster_lair" },
+    { "id": "predator_territory", "display_name": "Predator Territory", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-predator_territory" },
+    { "id": "karrath_ground", "display_name": "Karrath Hunting Ground", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-karrath_ground" },
+    { "id": "swallowed_sighting", "display_name": "Swallowed One Sighting", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-swallowed_sighting" },
+    { "id": "ambush_site", "display_name": "Ambush Site", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-ambush_site" },
+    { "id": "hazard_zone", "display_name": "Hazard Zone", "category": "Danger & Creatures", "marker_colour": "#d0433a", "icon_ref": "icon-hazard_zone" },
+
+    { "id": "corruption_zone", "display_name": "Corruption Zone", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-corruption_zone" },
+    { "id": "vein_breach", "display_name": "Vein Breach", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-vein_breach" },
+    { "id": "nightmare_site", "display_name": "Nightmare Manifestation", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-nightmare_site" },
+    { "id": "echo_pocket", "display_name": "Echo Pocket — Beauty", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-echo_pocket" },
+    { "id": "echo_trauma", "display_name": "Echo Trauma", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-echo_trauma" },
+    { "id": "veil_thin", "display_name": "Veil-Thin Site", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-veil_thin" },
+    { "id": "anchor_site", "display_name": "Anchor Site", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-anchor_site" },
+    { "id": "darkroad_node", "display_name": "Dark Road Node", "category": "Corruption & the Unseen", "marker_colour": "#9b6cf0", "icon_ref": "icon-darkroad_node" },
+
+    { "id": "shrine", "display_name": "Shrine", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-shrine" },
+    { "id": "temple", "display_name": "Temple", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-temple" },
+    { "id": "monastery", "display_name": "Monastery", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-monastery" },
+    { "id": "holy_site", "display_name": "Holy Site", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-holy_site" },
+    { "id": "wall_sanctum", "display_name": "Wall Sanctum", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-wall_sanctum" },
+    { "id": "blood_moon_altar", "display_name": "Blood Moon Altar", "category": "Religious & Holy", "marker_colour": "#e6c34a", "icon_ref": "icon-blood_moon_altar" },
+
+    { "id": "waypoint", "display_name": "Road Waypoint", "category": "Routes & Passages", "marker_colour": "#cbb994", "icon_ref": "icon-waypoint" },
+    { "id": "crossroads", "display_name": "Crossroads", "category": "Routes & Passages", "marker_colour": "#cbb994", "icon_ref": "icon-crossroads" },
+    { "id": "bridge", "display_name": "Bridge/Crossing", "category": "Routes & Passages", "marker_colour": "#cbb994", "icon_ref": "icon-bridge" },
+    { "id": "border_marker", "display_name": "Border Marker", "category": "Routes & Passages", "marker_colour": "#cbb994", "icon_ref": "icon-border_marker" },
+    { "id": "trailhead", "display_name": "Trailhead", "category": "Routes & Passages", "marker_colour": "#cbb994", "icon_ref": "icon-trailhead" },
+
+    { "id": "npc", "display_name": "Figure", "category": "Figures & Factions", "marker_colour": "#e2e8f0", "icon_ref": "icon-npc" },
+    { "id": "faction_seat", "display_name": "Faction Seat", "category": "Figures & Factions", "marker_colour": "#c01f2f", "icon_ref": "icon-faction_seat" }
+  ],
+
+  "entities": [
+    {
+      "id": "impure-fracta", "entity_type": "continent", "name": "The Impure Fracta", "parent_id": null,
+      "map_layer": "world", "coord_x": 500, "coord_y": 350, "is_published": true,
+      "rumour": "They name it the Impure Fracta — the broken land. They say natural law died here, and the world has been dying slowly ever since.",
+      "common_knowledge": "A continent in terminal decline since the Great Dissolution shattered natural law. Reality frays at the edges; the Veil is thin, and fear becomes flesh as Nightmares. It is the seventeenth year of the Age of Nightmares. The land ends in the south at the Wall of the SoA — the holiest place in the world.",
+      "uncommon_knowledge": "Six quadrants divide the land, their power and water unevenly spread. The [[Ancient Holy Road|ancient-holy-road]] runs its whole length, a ruined monument no one living could build. Beneath everything runs the Blood of the World — the true currency, older than water, scrap, or faith.",
+      "rare_knowledge": "The Echo means the land remembers what it was; old stone remembers hardest. Where memory pools, beauty and trauma both repeat. What broke the world is not finished breaking it.",
+      "gm_lore": "Central secret: the relationship between Delirium, the Echo, and the Wall of the SoA. Author to campaign.",
+      "admin_notes": "Continent root entity. All quadrants parent to this.",
+      "tags": ["continent"]
+    },
+
+    { "id": "q1", "entity_type": "quadrant", "name": "Q1", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [500, 150], "blob_r": 120, "sector_count": 7, "power_level": "moderate", "water_level": "moderate", "is_published": true, "rumour": "The northern apex, where the Road is born. Seven sectors, they say, and the Road splits the top of the world in three.", "common_knowledge": "The top quadrant, moderate in power and water. The Ancient Holy Road begins at its middle line, dividing Q1 into three parts. Its sectors are unnamed on most maps.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Sector names TBD by GM.", "tags": ["quadrant"] },
+    { "id": "q2", "entity_type": "quadrant", "name": "Q2 — The Revealed Quadrant", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [255, 360], "blob_r": 130, "sector_count": 9, "power_level": "high", "water_level": "moderate", "is_published": true,
+      "rumour": "The middle-western reach. Nine sectors. The only quarter of the world anyone has truly mapped.",
+      "common_knowledge": "Q2 sits middle-west, nine sectors strong. Two are well known to travellers — the [[Dust Gullets|dust-gullets]] and the [[Pale Reach|pale-reach]] — and the rest are open country, sparsely told.",
+      "uncommon_knowledge": "The fall of the [[Blue Leaf Rancho|blue-leaf-rancho]] left a power vacuum across the Gullets that ripples into every neighbouring sector. Water moved the borders here long before armies did.",
+      "rare_knowledge": "", "gm_lore": "", "admin_notes": "The fully-authored quadrant. 2 sectors written, 7 placeholder.", "tags": ["quadrant", "revealed"] },
+    { "id": "q3", "entity_type": "quadrant", "name": "Q3", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [500, 380], "blob_r": 140, "sector_count": 11, "power_level": "high", "water_level": "abundant", "is_published": true, "rumour": "The jewel of the continent, they say — eleven sectors, the richest land and the best water in a dying world.", "common_knowledge": "Centre-middle, eleven sectors. The wealthiest, most powerful, best-watered quarter of the Fracta. The Ancient Holy Road forms its eastern border.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["quadrant"] },
+    { "id": "q4", "entity_type": "quadrant", "name": "Q4", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [745, 365], "blob_r": 100, "sector_count": 5, "power_level": "low", "water_level": "scarce", "is_published": true, "rumour": "", "common_knowledge": "Middle-east, only five sectors — the poorest, driest, most contested quarter, pressed right against the jewel of Q3. A built-in war.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "The harsh frontier beside the jewel.", "tags": ["quadrant"] },
+    { "id": "q5", "entity_type": "quadrant", "name": "Q5", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [360, 575], "blob_r": 120, "sector_count": 10, "power_level": "high", "water_level": "moderate", "is_published": true, "rumour": "", "common_knowledge": "Bottom-west, ten sectors strong.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["quadrant"] },
+    { "id": "q6", "entity_type": "quadrant", "name": "Q6", "parent_id": "impure-fracta", "map_layer": "continent", "blob_center": [615, 580], "blob_r": 110, "sector_count": 8, "power_level": "moderate", "water_level": "moderate", "is_published": true, "rumour": "", "common_knowledge": "Bottom-east, eight sectors. The Ancient Holy Road runs down through it to the Wall of the SoA.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["quadrant"] },
+
+    {
+      "id": "dust-gullets", "entity_type": "sector", "name": "The Dust Gullets", "parent_id": "q2", "map_layer": "quadrant",
+      "blob_center": [610, 430], "blob_r": 150, "power_level": "moderate", "water_level": "scarce", "is_published": true,
+      "rumour": "The Gullets. Mountains full of holes, and the wind screams through them hard enough to strip a man to bone. There's iron in the rock, they say, and worse than iron under it. The [[Blue Leaf|blue-leaf-rancho]] owned the water there. Owned everything, by owning the water.",
+      "common_knowledge": "The Dust Gullets are a frontier of jagged ranges bored through with canyon-sized holes that funnel flesh-scouring windstorms. The ground is rich in ancient iron and copper, valuable to scrap-miners and dangerous to all — dig wrong and you breach a Corruption Vein. Water is the only real currency. The [[Blue Leaf Rancho|blue-leaf-rancho]] held the sector through its monopoly on the one underground river, dammed in the cliffs and routed to their fortress. That fortress, the [[High Aerie|high-aerie]], has recently fallen — and who controls the water now is an open wound.",
+      "uncommon_knowledge": "With the Aerie down, the dammed river runs wild again and three scrap-clans are bleeding over the spillage. The [[Ouiye Aundii|ouiye-aundii]] keep to the deep gullies the windstorms guard, and they keep something else besides — heirlooms they cannot read.",
+      "rare_knowledge": "The windstorms are not random. They thicken over the places where the rock is thinnest, as if the land were breathing through its wounds — and the worst of them blow up from below, not across.",
+      "gm_lore": "The storms intensify near the buried Monastery; the land's stabilising machinery is failing, venting pressure.",
+      "admin_notes": "5 published micro-locations. Monastery left undiscovered as the deep secret.",
+      "tags": ["sector", "frontier", "arid"]
+    },
+    {
+      "id": "pale-reach", "entity_type": "sector", "name": "The Pale Reach", "parent_id": "q2", "map_layer": "quadrant",
+      "blob_center": [320, 250], "blob_r": 140, "power_level": "low", "water_level": "scarce", "is_published": true,
+      "rumour": "North-west of the Gullets the land goes pale and flat. Sand the colour of old bone. There's water under the cactus, they say, if the things in the sand don't reach you first.",
+      "common_knowledge": "Flat, open, bleached dunes — amber deepening to near-white. The cactus Spires mark deep groundwater. The oases are the only reason to come: the [[Amber Well|amber-well]] and the [[Gilded Mirage|gilded-mirage]]. The [[Bleached Crossing|bleached-crossing]] is a known killing ground. A single [[Karrath pack|karrath-pack]] hunts the Reach now.",
+      "uncommon_knowledge": "The [[Amber Well|amber-well]]'s water-council rations by an old debt-ledger and will let a stranger die of thirst over a technicality. The [[Gilded Mirage|gilded-mirage]] runs by two rules — have fun, keep it clean — and the [[Jewel|the-jewel]] enforces the second with more violence than the first. The Karrath avoid the Mirage; they disdain to walk among the weak.",
+      "rare_knowledge": "The corruption-pulse that drew the Karrath north did not come from the surface. Something is turning beneath the [[Bleached Crossing|bleached-crossing]], in the dry bones of the old river. The pack knows. They are not hunting in the Reach — they are waiting on it.",
+      "gm_lore": "The pulse originates from the same failing stabiliser as the Gullets storms; the dry river-bed connects to the buried system.",
+      "admin_notes": "5 published micro-locations; vessel starts at 2 discovered = 40% (matches plan example).",
+      "tags": ["sector", "desert", "oases"]
+    },
+    { "id": "q2-s3", "entity_type": "sector", "name": "Q2 · Sector 3", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [180, 470], "blob_r": 90, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder — GM to author.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s4", "entity_type": "sector", "name": "Q2 · Sector 4", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [470, 200], "blob_r": 85, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s5", "entity_type": "sector", "name": "Q2 · Sector 5", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [150, 220], "blob_r": 90, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s6", "entity_type": "sector", "name": "Q2 · Sector 6", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [820, 250], "blob_r": 85, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s7", "entity_type": "sector", "name": "Q2 · Sector 7", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [840, 470], "blob_r": 90, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s8", "entity_type": "sector", "name": "Q2 · Sector 8", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [430, 560], "blob_r": 95, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+    { "id": "q2-s9", "entity_type": "sector", "name": "Q2 · Sector 9", "parent_id": "q2", "map_layer": "quadrant", "blob_center": [680, 580], "blob_r": 90, "is_published": true, "rumour": "", "common_knowledge": "Open country. Untold.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "Placeholder.", "tags": ["sector", "placeholder"] },
+
+    {
+      "id": "high-aerie", "entity_type": "location", "name": "The High Aerie", "parent_id": "dust-gullets", "map_layer": "sector",
+      "location_subtype": "collapsed_site", "location_scale": "macro", "coord_x": 640, "coord_y": 300, "is_published": true,
+      "rumour": "The Blue Leaf's eyrie, up in the cliff-marrow. They said it could never fall. They were wrong.",
+      "common_knowledge": "The [[Blue Leaf Rancho|blue-leaf-rancho]]'s cliff-fortress, raised atop a massive face over the dammed Fluid Vein and long thought impenetrable. Now collapsed — a rubble field with a waterfall pouring through where a tyranny used to sit.",
+      "uncommon_knowledge": "The collapse freed the dammed river. Scrap-clans now fight over the spill, and the ruin is picked-over but not emptied — the deepest vaults went down with the cliff and no one has reached them.",
+      "rare_knowledge": "The fall was not a siege and not an accident. The cliff failed from inside, along a seam no surveyor had mapped — as though the rock itself let go.",
+      "gm_lore": "The seam follows a buried conduit of the Monastery system. The Aerie was built, unknowingly, on top of failing ancient machinery.",
+      "admin_notes": "Sector-shaping event. Ripples ongoing.", "tags": ["location:dust-gullets", "faction:blue-leaf"]
+    },
+    {
+      "id": "fluid-vein", "entity_type": "location", "name": "The Fluid Vein", "parent_id": "dust-gullets", "map_layer": "sector",
+      "location_subtype": "underground_river", "location_scale": "micro", "coord_x": 560, "coord_y": 420, "is_published": true,
+      "rumour": "There's a river under the Gullets, they say. The Blue Leaf put a wall across it and got rich.",
+      "common_knowledge": "The sector's only significant water — a vast underground river dammed inside the cliff-marrow and routed up into the [[High Aerie|high-aerie]]. The dam is breached now and the water runs where it likes.",
+      "uncommon_knowledge": "Where the freed water meets old scrap-tailings it turns the colour of rust and is unsafe to drink for a day's walk downstream.",
+      "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:dust-gullets", "water"]
+    },
+    {
+      "id": "scrap-warren", "entity_type": "location", "name": "The Scrap Warren", "parent_id": "dust-gullets", "map_layer": "sector",
+      "location_subtype": "mine", "location_scale": "micro", "coord_x": 740, "coord_y": 380, "is_published": true,
+      "rumour": "Men go into the holes for iron and copper. Not all of them come back, and not all that come back are still men.",
+      "common_knowledge": "A maze of scrap-mines bored into the iron-rich rock. Profitable and lethal in equal measure — dig in the wrong direction and you breach a Corruption Vein.",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:dust-gullets", "scrap"]
+    },
+    {
+      "id": "vein-breach", "entity_type": "location", "name": "The Weeping Breach", "parent_id": "dust-gullets", "map_layer": "sector",
+      "location_subtype": "vein_breach", "location_scale": "micro", "coord_x": 690, "coord_y": 500, "is_published": true,
+      "rumour": "There's a hole in the rock that breathes wrong. Nobody mines near it twice.",
+      "common_knowledge": "A breached Corruption Vein — a wound in the rock where compressed reality-trauma leaks into the air. Exposure dissolves the self; long exposure makes a Swallowed One.",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:dust-gullets", "corruption"]
+    },
+    {
+      "id": "ouiye-monastery", "entity_type": "location", "name": "The Monastery of the Archon of Earth", "parent_id": "dust-gullets", "map_layer": "sector",
+      "location_subtype": "buried_facility", "location_scale": "macro", "coord_x": 500, "coord_y": 360, "is_published": true,
+      "rumour": "An old, old story among the [[Ouiye Aundii|ouiye-aundii]] — a holy place under the sand that could mend the world, if anyone remembered how.",
+      "common_knowledge": "A pre-cataclysm facility of the Archon of Earth — Forge and Structure — buried beneath the Gullets. Said to be activatable with the right keys.",
+      "uncommon_knowledge": "Activated, it would process the land's corruption and lock reality back into place for hundreds of miles — a permanent sanctuary. The full requirements are not understood.",
+      "rare_knowledge": "The Ouiye Aundii are the descendants of its keepers, though they have forgotten what they keep. The Earth-Chord Cylinder is one key. There are others. No one living knows how many.",
+      "gm_lore": "Its slow failure is the source of the sector's storms and the Reach's corruption-pulse. Reactivation is a campaign-scale goal.",
+      "admin_notes": "Deliberately UNDISCOVERED at start — the buried secret of Q2.", "tags": ["location:dust-gullets", "holy", "secret"]
+    },
+
+    {
+      "id": "amber-well", "entity_type": "location", "name": "The Amber Well", "parent_id": "pale-reach", "map_layer": "sector",
+      "location_subtype": "walled_oasis", "location_scale": "macro", "coord_x": 360, "coord_y": 300, "is_published": true,
+      "rumour": "A walled oasis run by a council that would rather watch you die of thirst than break their own ledger.",
+      "common_knowledge": "A walled oasis settlement built around deep groundwater, ruled by a small water-council. Insular and watchful, dangerous in a social rather than a violent way.",
+      "uncommon_knowledge": "The council rations by an old debt-ledger and will let a stranger die over a technicality. They hold the Ledger of Thirsts — a book recording every water-debt in the sector, and a political weapon.",
+      "rare_knowledge": "The [[Jewel|the-jewel]] of the Mirage was raised here, on the council's water-debt ledgers, and left when they understood what they had made.",
+      "gm_lore": "", "admin_notes": "", "tags": ["location:pale-reach", "water", "faction-seat"]
+    },
+    {
+      "id": "gilded-mirage", "entity_type": "location", "name": "The Gilded Mirage", "parent_id": "pale-reach", "map_layer": "sector",
+      "location_subtype": "oasis_town", "location_scale": "macro", "coord_x": 250, "coord_y": 210, "is_published": true,
+      "rumour": "An oasis town with two rules — have fun, keep it clean — and a ruler called the [[Jewel|the-jewel]] who kills faster over the second than the first.",
+      "common_knowledge": "A loud, alive, lawless-but-clean oasis town: a hub of trade, information, outlaws, and stranger commerce. A refuge from the [[Karrath|karrath-pack]], who disdain to walk among the weak — and a den of every other danger.",
+      "uncommon_knowledge": "Information flows through the [[Jewel|the-jewel]] the way water flows through the [[Amber Well|amber-well]] — controlled, rationed, and sold.",
+      "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:pale-reach", "faction:gilded-mirage"]
+    },
+    {
+      "id": "bleached-crossing", "entity_type": "location", "name": "The Bleached Crossing", "parent_id": "pale-reach", "map_layer": "sector",
+      "location_subtype": "bone_field", "location_scale": "micro", "coord_x": 520, "coord_y": 430, "is_published": true,
+      "rumour": "A dry river full of bones. They say the sand swims there.",
+      "common_knowledge": "A dry river-bed strewn with bones — a known killing ground of sand-swimming predators.",
+      "uncommon_knowledge": "", "rare_knowledge": "Something is turning beneath it, in the bones of the old river. The corruption-pulse that drew the Karrath north rises from here.", "gm_lore": "Connects to the buried Monastery system.", "admin_notes": "", "tags": ["location:pale-reach", "danger"]
+    },
+    {
+      "id": "spire-grove", "entity_type": "location", "name": "The Tall Spires", "parent_id": "pale-reach", "map_layer": "sector",
+      "location_subtype": "spire_grove", "location_scale": "micro", "coord_x": 180, "coord_y": 400, "is_published": true,
+      "rumour": "Old cactus the size of towers. Where they grow, there's water deep down.",
+      "common_knowledge": "A grove of ancient cactus Spires marking deep groundwater — a landmark and a lifeline for those who know to read them.",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:pale-reach", "water"]
+    },
+    {
+      "id": "karrath-ground", "entity_type": "location", "name": "The Pack's Hunting Ground", "parent_id": "pale-reach", "map_layer": "sector",
+      "location_subtype": "karrath_ground", "location_scale": "macro", "coord_x": 640, "coord_y": 260, "is_published": true,
+      "rumour": "Six of them, they say. Never more, never fewer. They hunt the open Reach now.",
+      "common_knowledge": "The roaming territory of a single [[Karrath pack|karrath-pack]] — six predators drawn north by a corruption-pulse.",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:pale-reach", "faction:karrath", "danger"]
+    },
+
+    {
+      "id": "the-jewel", "entity_type": "people", "name": "The Jewel of the Gilded Mirage", "parent_id": null,
+      "map_layer": "none", "is_published": true,
+      "rumour": "They say the Mirage has a ruler called the Jewel. Two rules in that town — have fun, keep it clean — and the Jewel kills faster over the second than the first.",
+      "common_knowledge": "The sovereign of the [[Gilded Mirage|gilded-mirage]]. Keeps order through generosity and sudden, precise violence. Information flows through the Jewel the way water flows through the [[Amber Well|amber-well]] — controlled, rationed, and sold.",
+      "uncommon_knowledge": "Few favours the Jewel grants are free, and none are forgotten. The Mirage's cleanliness is not vanity — it is the one law the Jewel will kill over without warning.",
+      "rare_knowledge": "The Jewel is not selling escape because they fear the corruption-pulse. They are selling it because they intend to be the last one holding anything of value when the Reach turns — and have already decided who is worth taking and who is being left.",
+      "gm_lore": "The Jewel has a private cache and an escape route west. Knows more about the pulse than they admit.",
+      "admin_notes": "People entity → UI shows 'Met' instead of 'Visited'.",
+      "tags": ["faction:gilded-mirage", "location:gilded-mirage"]
+    },
+    {
+      "id": "blue-leaf-rancho", "entity_type": "faction", "name": "The Blue Leaf Rancho", "parent_id": null, "map_layer": "none", "is_published": true,
+      "rumour": "The water-tyrants of the Gullets. Owned the river, so they owned everyone.",
+      "common_knowledge": "A resource-empire that ruled the [[Dust Gullets|dust-gullets]] through a monopoly on the sector's only water, from the cliff-fortress called the [[High Aerie|high-aerie]]. Now broken with the Aerie's fall.",
+      "uncommon_knowledge": "Like all Ranchos it was ruled by a shrouded Master beneath fanatically devoted Commanders. With the Master's seat collapsed, those Commanders are scattered and dangerous.",
+      "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["location:dust-gullets"]
+    },
+    {
+      "id": "ouiye-aundii", "entity_type": "faction", "name": "The Ouiye Aundii", "parent_id": null, "map_layer": "none", "is_published": true,
+      "rumour": "An old tribe of the Gullets. They keep to the deep gullies and keep old things they won't explain.",
+      "common_knowledge": "A tribe of the [[Dust Gullets|dust-gullets]], bound to land and lineage and the Archons. Earth-marked in the main — they speak in structures and orders, lists and proper sequences.",
+      "uncommon_knowledge": "They keep ancestral heirlooms whose true purpose they no longer understand. Their ancestors were once keepers of something beneath the sand.",
+      "rare_knowledge": "They are the descendants of the keepers of the [[Monastery of the Archon of Earth|ouiye-monastery]].",
+      "gm_lore": "", "admin_notes": "", "tags": ["location:dust-gullets", "tribe", "archon:earth"]
+    },
+    {
+      "id": "karrath-pack", "entity_type": "people", "name": "The Karrath Pack of the Reach", "parent_id": null, "map_layer": "none", "is_published": true,
+      "rumour": "Six predators that hunt as one. They worship the Blood Moon and they take the wrong-blooded.",
+      "common_knowledge": "A pack of exactly six Karrath — Alpha, Seer, Betas, Hunters — drawn into the [[Pale Reach|pale-reach]] by a corruption-pulse. They cleanse corruption by offering wrong-blood to the Blood Moon.",
+      "uncommon_knowledge": "They disdain to hunt among the weak, which is why the [[Gilded Mirage|gilded-mirage]] is safe from them. A successful offering turns the sacrificer's skin permanently red — the right to lead and to sire the next generation.",
+      "rare_knowledge": "They are not hunting the Reach. They are waiting on whatever is turning beneath the [[Bleached Crossing|bleached-crossing]].",
+      "gm_lore": "", "admin_notes": "", "tags": ["faction:karrath", "location:pale-reach", "archon:moon"]
+    },
+    {
+      "id": "archonic-church", "entity_type": "faction", "name": "The Archonic Church", "parent_id": null, "map_layer": "none", "is_published": true,
+      "rumour": "The faith of the eight faceless Archons. They hold the Road, or try to.",
+      "common_knowledge": "The dominant faith of the Fracta — eight faceless Archons who speak only in symbolic vision, never words. Every being is Marked by one at birth. The Church is the closest thing the broken world has to order, and it guards the [[Ancient Holy Road|ancient-holy-road]].",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["religion"]
+    },
+    {
+      "id": "the-witness", "entity_type": "role", "name": "The Witness", "parent_id": null, "map_layer": "none", "is_published": true,
+      "rumour": "One who carries the world's corruption so others need not.",
+      "common_knowledge": "A role, not a person: the bearer of the Staff of Corruption, a spiritual filter that draws ambient corruption away from allies and forces it into the bearer's own mind — sanity spent to keep the world from dissolving.",
+      "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["role"]
+    },
+
+    {
+      "id": "ancient-holy-road", "entity_type": "corridor", "name": "The Ancient Holy Road", "parent_id": "impure-fracta", "map_layer": "continent", "is_published": true,
+      "rumour": "The old road. Runs from the top of the world all the way down to the Wall. They say you can cross the whole Fracta on it in a month, if the road lets you. Mostly it doesn't. Faster than going around — that's how it gets you.",
+      "common_knowledge": "Runs the length of the continent, from the northern quadrant down to the Wall of the SoA. Older than the present age, built on a scale no one can match now — arcs ten to fifteen metres tall, ruined aqueducts, towers, structures large enough to shelter towns. The [[Archonic Church|archonic-church]] holds stretches and tries to keep it passable, but the road is long — a month of wagon travel — and they cannot hold all of it. The unheld stretches belong to lawless men and worse.",
+      "uncommon_knowledge": "The held stretches are marked by gate-towns and protected camps; the unheld stretches by ambush and silence. Travellers learn to read which is which before nightfall.",
+      "rare_knowledge": "Where the Echo runs strong, the road remembers itself — processions that are not there, lights in fallen towers, the sound of many feet walking south in the dark.",
+      "gm_lore": "The Road's true purpose, what walks it, and how it connects to the Wall and to Delirium — author to campaign. One of the world's central secrets.",
+      "admin_notes": "Corridor entity. Children are waypoints with sequence_index. Drawn as overlay ribbon on the continent map.",
+      "tags": ["corridor", "holy", "contested"]
+    },
+    { "id": "ahr-wp-1", "entity_type": "waypoint", "name": "The Northern Threshold", "parent_id": "ancient-holy-road", "map_layer": "corridor", "location_subtype": "gate_town", "sequence_index": 1, "is_published": true, "rumour": "Where the Road begins, at the top of the world.", "common_knowledge": "A gate-town at the Road's northern origin in Q1, held by the Church. The last reliably safe stop before the long descent.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["corridor"] },
+    { "id": "ahr-wp-2", "entity_type": "waypoint", "name": "The Sundered Aqueduct", "parent_id": "ancient-holy-road", "map_layer": "corridor", "location_subtype": "aqueduct", "sequence_index": 2, "is_published": true, "rumour": "A broken water-arch big enough to march an army under.", "common_knowledge": "A ruined aqueduct spanning the road where it forms the border of Q3 and Q4 — a landmark, a shelter, and an ambush point all at once.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["corridor"] },
+    { "id": "ahr-wp-3", "entity_type": "waypoint", "name": "The Watching Towers", "parent_id": "ancient-holy-road", "map_layer": "corridor", "location_subtype": "tower", "sequence_index": 3, "is_published": true, "rumour": "Towers that still have lights in them, some nights, with no one inside.", "common_knowledge": "A line of ancient towers along the Q6 stretch — half-held by the Church, half-haunted by the Echo.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["corridor", "echo"] },
+    { "id": "ahr-wp-4", "entity_type": "waypoint", "name": "The Wall Approach", "parent_id": "ancient-holy-road", "map_layer": "corridor", "location_subtype": "wall_sanctum", "sequence_index": 4, "is_published": true, "rumour": "The end of the Road. The Wall. Few who set out for it arrive.", "common_knowledge": "The Road's terminus at the Wall of the SoA — the broken defensive line with its gap-towns, and the holiest place in the world beyond.", "uncommon_knowledge": "", "rare_knowledge": "", "gm_lore": "The true nature of the SoA is a central secret.", "admin_notes": "", "tags": ["corridor", "holy"] },
+
+    { "id": "earth-chord-cylinder", "entity_type": "item", "name": "The Earth-Chord Cylinder", "parent_id": null, "map_layer": "none", "is_published": true, "rumour": "An old stone rod the tribes won't sell. Lines on it that move when you aren't looking.", "common_knowledge": "A hand-length cylinder of dense dark stone inscribed with shifting geometric lines — a coded key to the [[Monastery of the Archon of Earth|ouiye-monastery]], kept as an heirloom by tribes who have forgotten what it is.", "uncommon_knowledge": "", "rare_knowledge": "It is one key of several. No one living knows how many it takes.", "gm_lore": "", "admin_notes": "", "tags": ["item", "archon:earth", "key"] },
+    { "id": "staff-of-corruption", "entity_type": "item", "name": "The Staff of Corruption", "parent_id": null, "map_layer": "none", "is_published": true, "rumour": "The Witness's staff. It eats the rot of the world and feeds it to the one who holds it.", "common_knowledge": "The [[Witness|the-witness]]'s tool — a spiritual filter that draws ambient corruption away from allies and forces it into the bearer's mind, preventing the world dissolving around them at the cost of their sanity.", "uncommon_knowledge": "Ancient, having survived many ages. Can serve as an anchor for a tethered spirit, dependent on a living bearer.", "rare_knowledge": "", "gm_lore": "", "admin_notes": "", "tags": ["item", "anchor"] }
+  ],
+
+  "deepLore": [
+    { "id": "dl-gullets-1", "entity_id": "dust-gullets", "origin_faction": "Tradition of the Ouiye Aundii", "origin_entity_id": "ouiye-aundii", "sort_order": 1, "is_published": true,
+      "access_note": "Requires the trust of the Ouiye Aundii.",
+      "lore_text": "Beneath the Gullets lies the Monastery of the Archon of Earth — a pre-cataclysm facility built by hands that served Forge and Structure before the Dissolution. The Ouiye Aundii are the descendants of its keepers, though they have forgotten what they keep. Activated with the right keys, it would process the land's corruption and lock reality back into place for hundreds of miles. The Earth-Chord Cylinder is one key. There are others. No one living knows how many." },
+
+    { "id": "dl-jewel-1", "entity_id": "the-jewel", "origin_faction": "The Amber Well water-council", "origin_entity_id": "amber-well", "sort_order": 1, "is_published": true,
+      "access_note": "Bought, for a price, from the Amber Well council.",
+      "lore_text": "The council will tell you, for a price, that the Jewel once belonged to the Well — raised on its water-debt ledgers, and left when they understood that a town with no walls and one rule about cleanliness could be controlled more completely than a town with a hundred laws. They call the Jewel their most successful graduate, the way you describe a wound that healed wrong." },
+
+    { "id": "dl-ahr-1", "entity_id": "ancient-holy-road", "origin_faction": "The Echo / direct experience", "origin_entity_id": null, "sort_order": 1, "is_published": true,
+      "access_note": "Earned by those who have walked the haunted stretches and lived.",
+      "lore_text": "The Road was not built for travel. Its scale and its alignment toward the Wall were built to mean something, in an age when the Fracta could build meaning into stone. What it was for is forgotten, but the stone has not forgotten. Where the Echo runs strong, travellers report the road remembering itself: processions that are not there, lights in fallen towers, the sound of a great many feet walking south in the dark. The religious forces do not protect the Road only from bandits. They protect it from what it still is." },
+    { "id": "dl-ahr-2", "entity_id": "ancient-holy-road", "origin_faction": "The Karrath", "origin_entity_id": "karrath-pack", "sort_order": 2, "is_published": true,
+      "access_note": "Spoken in clicks and throat-calls, to those the pack does not eat.",
+      "lore_text": "The Road is a scar. Wrong-blood ran here in a quantity the Moon still remembers, and the stone drank it and will not let it go. The faithful walk it south as if it were holy. It is not holy. It is a throat, and it is still swallowing." },
+    { "id": "dl-ahr-3", "entity_id": "ancient-holy-road", "origin_faction": "The Archonic Church", "origin_entity_id": "archonic-church", "sort_order": 3, "is_published": true,
+      "access_note": "Doctrine, granted to the devout.",
+      "lore_text": "The Road was laid by the first faithful, that the pilgrim might walk unbroken from the top of the world to the Wall of the SoA and stand at the threshold of the Archons. That it has fallen to ruin and to lawless men is the age's great shame, and to keep even one stretch of it passable is an act of devotion. Walk it south. The Archons are at the end of it." }
+  ],
+
+  "initialDiscoveries": {
+    "impure-fracta": "known",
+    "ancient-holy-road": "heard_of",
+    "q1": "heard_of",
+    "q2": "visited",
+    "q3": "heard_of",
+    "dust-gullets": "visited",
+    "pale-reach": "visited",
+    "high-aerie": "known",
+    "fluid-vein": "visited",
+    "scrap-warren": "heard_of",
+    "vein-breach": "heard_of",
+    "amber-well": "visited",
+    "gilded-mirage": "visited",
+    "the-jewel": "heard_of",
+    "blue-leaf-rancho": "visited",
+    "ouiye-aundii": "heard_of",
+    "karrath-pack": "heard_of",
+    "archonic-church": "heard_of",
+    "ahr-wp-1": "visited",
+    "ahr-wp-2": "heard_of",
+    "earth-chord-cylinder": "heard_of",
+    "staff-of-corruption": "heard_of"
+  },
+
+  "factionAccess": ["Tradition of the Ouiye Aundii", "The Amber Well water-council", "The Echo / direct experience", "The Archonic Church"]
+}

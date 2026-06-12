@@ -1,0 +1,109 @@
+# ===========================================================================
+# Blood of the World — Codex · build & deploy to GitHub Pages
+#
+# WHAT THIS DOES
+#   On every push to `main` (and on a manual run), this builds the SvelteKit
+#   app with adapter-static and publishes the result to THIS repository's own
+#   GitHub Pages site:
+#       https://<your-github-username>.github.io/<this-repo-name>/
+#
+#   That URL is your STAGING / preview site. It is a brand-new site that has
+#   nothing to do with your old live monolith — deploying here cannot touch or
+#   take down the live site. You smoke-test this URL first; the production
+#   cut-over (swapping the live index.html) stays a deliberate manual step you
+#   do last. See ARCHITECTURE_AND_MIGRATION_PLAN.md §8 Phase 4.
+#
+# WHAT YOU MUST DO BY HAND FIRST (one time — see the README "Deploying" section)
+#   1. Create the GitHub repo and push this project to it.
+#   2. Repo → Settings → Secrets and variables → Actions → add two secrets:
+#         VITE_SUPABASE_URL        = your project URL
+#         VITE_SUPABASE_ANON_KEY   = your project's PUBLIC anon key
+#      (The anon key is safe to expose — your data is protected by Row-Level
+#      Security — but keeping it in Secrets follows §11 and keeps it out of git.)
+#   3. Repo → Settings → Pages → "Build and deployment" → Source = GitHub Actions.
+#   After that, this workflow runs itself on each push to main.
+#
+# The base path (/<repo>) is computed automatically from the repo name below,
+# so you never hand-edit svelte.config.js for this.
+# ===========================================================================
+name: Deploy Codex to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # lets you run it by hand from the Actions tab
+
+# Permissions the official Pages deploy needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let an in-progress run finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies (exact, from package-lock)
+        run: npm ci
+
+      # Project pages live under a sub-path (/<repo>); user/org pages
+      # (<login>.github.io) live at the root. Compute the right base path from
+      # the repo name so links and assets resolve either way.
+      - name: Compute base path from repo name
+        run: |
+          REPO="${{ github.event.repository.name }}"
+          OWNER="${{ github.repository_owner }}"
+          if [ "$REPO" = "${OWNER}.github.io" ]; then
+            echo "BASE_PATH=" >> "$GITHUB_ENV"
+            echo "Root user/org page -> base path is empty."
+          else
+            echo "BASE_PATH=/$REPO" >> "$GITHUB_ENV"
+            echo "Project page -> base path is /$REPO"
+          fi
+
+      - name: Build (inject Supabase secrets + base path at build time)
+        env:
+          # Vite inlines these into the client bundle as import.meta.env.VITE_*.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          # BASE_PATH is read by svelte.config.js (already on $GITHUB_ENV above).
+        run: npm run build
+
+      # GitHub Pages is a static host with no SPA routing, so a deep link like
+      # /<repo>/sheet has no file on disk. Serving the app shell as 404.html
+      # makes Pages fall back to it, and the client router then renders /sheet.
+      # .nojekyll stops Pages from hiding the _app/ folder (underscore dirs).
+      - name: Add SPA 404 fallback + .nojekyll
+        run: |
+          cp build/index.html build/404.html
+          touch build/.nojekyll
+
+      - name: Upload the built site as the Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

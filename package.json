@@ -1,0 +1,24 @@
+{
+  "name": "botw-codex",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Blood of the World — Codex. Unified SvelteKit app (character sheet, calendar, deeds, notes, atlas). Phase 0: scaffold + atlas moved in unchanged.",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "gen:sql": "node scripts/gen-location-types-sql.js",
+    "gen:world": "node scripts/gen-world-sql.js"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.6",
+    "@sveltejs/kit": "^2.8.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "svelte": "^4.2.19",
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}

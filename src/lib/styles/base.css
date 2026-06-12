@@ -1,0 +1,25 @@
+/* Blood of the World — Codex · base.css (§4).
+ *
+ * A deliberately tiny global baseline that sits under tokens.css. The app shell
+ * (routes/+layout.svelte), the landing page, and the atlas (features/atlas/
+ * app.css) each own their own surface treatment — background, body font, the
+ * box model their layouts were authored against — so this file intentionally
+ * avoids body-level background / font-family / box-sizing rules that would fight
+ * those surfaces. It only sets things that are already true everywhere, plus the
+ * dark colour-scheme hint so native controls (scrollbars, selects) match §6.
+ */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  color-scheme: dark;
+}

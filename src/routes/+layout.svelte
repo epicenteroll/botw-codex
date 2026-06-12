@@ -13,6 +13,7 @@
   import '$lib/styles/base.css'
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
+  import { afterNavigate } from '$app/navigation'
   import { base } from '$app/paths'
   import { isSupabaseConfigured } from '$lib/core/supabase.js'
   import {
@@ -56,6 +57,15 @@
   let confirmPw = ''
 
   $: onAtlas = $page.url.pathname.startsWith(base + '/atlas')
+
+  // The fixed shell never scrolls the window; the .content area scrolls
+  // internally. Reset it to the top on each tab change so a page (e.g. the tall
+  // Sheet) always opens at the top instead of inheriting the previous tab's
+  // scroll position (which could clip the header).
+  let contentEl
+  afterNavigate(() => {
+    if (contentEl) contentEl.scrollTop = 0
+  })
 
   onMount(() => {
     initAuth()
@@ -239,7 +249,7 @@
     </div>
   {/if}
 
-  <main class="content" class:atlas={onAtlas}>
+  <main class="content" class:atlas={onAtlas} bind:this={contentEl}>
     <slot />
   </main>
 </div>
@@ -268,8 +278,19 @@
     flex-direction: column;
     height: 100vh;
     height: 100dvh;
+    overflow: hidden;
     background: var(--bg);
     color: var(--text);
+  }
+
+  /* Fixed app shell: the window/document must never scroll — only .content
+     scrolls internally. Without this, a tall page (e.g. the Sheet) could push
+     the document past the viewport and scroll the whole page, hiding the top
+     bar and the page header until a reflow/refresh. */
+  :global(html),
+  :global(body) {
+    height: 100%;
+    overflow: hidden;
   }
 
   .topbar {

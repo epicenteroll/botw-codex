@@ -14,6 +14,23 @@ import { writable, derived, get } from 'svelte/store'
 
 const MAX = 50
 
+// Browser-history mirroring is OFF in the unified Codex.
+//
+// Originally the atlas pushed each internal step into history.pushState so the
+// Android hardware back button stepped INSIDE the atlas. But the atlas is now
+// one route inside a SvelteKit app, and SvelteKit owns window history + the
+// back/forward button. Mirroring here called history.replaceState/pushState
+// with our own {botw} state, which overwrote SvelteKit's navigation markers —
+// so leaving the atlas (e.g. to the Sheet) and pressing Back left the URL
+// changed but the page not re-rendered (fixed only by a refresh), and could
+// leave a half-switched, cropped layout.
+//
+// With mirroring off, the atlas's own ‹ › arrows still walk its in-memory
+// stack; the browser back/forward button moves between ROUTES, as it should.
+// (To restore the old hardware-back behaviour in a standalone build, flip this
+// to true.)
+const MIRROR_BROWSER = false
+
 const stack = writable([]) // array of states
 const index = writable(-1) // pointer into stack
 
@@ -46,7 +63,7 @@ export function push(state, { mirrorBrowser = true } = {}) {
     index.set(next.length - 1)
     return next
   })
-  if (mirrorBrowser && typeof history !== 'undefined' && history.pushState) {
+  if (mirrorBrowser && MIRROR_BROWSER && typeof history !== 'undefined' && history.pushState) {
     try {
       history.pushState({ botw: { ...state } }, '')
     } catch {
@@ -84,7 +101,7 @@ export function jumpTo(state) {
 export function init(state) {
   stack.set([{ ...state }])
   index.set(0)
-  if (typeof history !== 'undefined' && history.replaceState) {
+  if (MIRROR_BROWSER && typeof history !== 'undefined' && history.replaceState) {
     try {
       history.replaceState({ botw: { ...state } }, '')
     } catch {

@@ -85,6 +85,14 @@ With `.env.local` blank, the atlas runs against its bundled seed
 (`src/lib/features/atlas/lib/seed.json`) — no backend needed. Fill in the
 Supabase keys to query the real project instead; no code changes either way.
 
+**Previewing the other tabs offline.** Sheet/Calendar/Deeds/Notes normally need a
+logged-in vessel, so offline they'd show "No vessel summoned." To look at them
+without a backend, click **"Preview sample vessel"** in the top-right while in
+offline mode. It loads a read-only sample character entirely in memory — it never
+writes anywhere and disappears the moment real Supabase keys are set. It's a
+temporary dev aid (`src/lib/core/demoVessel.js`); see the architecture doc §13
+for how to remove it. Click **"Exit sample vessel"** to clear it.
+
 ---
 
 ## The remaining Phase 0 step (do this in Supabase)
@@ -262,8 +270,11 @@ site; testing it cannot affect the live monolith.
 
 ## The four rules still hold (§5)
 
-This phase changed **no** feature code, **no** Supabase table schema, and **no**
-live-monolith behaviour. The data is still an object the screen reflects;
+This phase changed **no** Supabase table schema and **no** live-monolith
+behaviour. The UI-consistency work and the offline preview added alongside it
+(atlas responsive scoping, the shared empty-state component, the landing copy,
+and the removable `demoVessel` dev aid) are recorded in the architecture doc
+§13; none touch the data model. The data is still an object the screen reflects;
 components still don't touch the database; game maths stays pure; and
 `npm run build` remains the safety net — green here, with only the known
 `Sheet.svelte:368` a11y warnings.

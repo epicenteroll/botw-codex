@@ -667,3 +667,40 @@ and the build is green at root and under a sub-path; the remaining steps are
 manual (GitHub repo + Secrets + Pages, the Supabase SQL, the local smoke-test,
 and the final live `index.html` swap) and are scripted as runbooks in the
 README's "Deploying & cutting over" section.*
+
+---
+
+## 13. Addendum — Phase 4 session (UI consistency + offline preview)
+
+Small, non-feature changes made alongside the cut-over hand-off. None touch the
+Supabase schema, the live monolith, or the four rules (§5).
+
+- **Atlas responsive fix (the desktop "squished to the left" bug).** The atlas's
+  `app.css` used bare element selectors (`main`, `header`, `aside`) from when it
+  owned the whole page. In the unified Codex the shell also renders
+  `<main class="content">` and `<header class="topbar">`, so the global
+  `main{display:flex}` leaked onto the shell's content area and turned it into a
+  horizontal flex row — collapsing the atlas into a narrow left column. Those
+  selectors are now **scoped under `.atlas-host`** (the atlas's own wrapper), and
+  the shell's `.content.atlas` is an explicit flex column. Result: proper
+  desktop two-pane, plus the tablet/phone (`≤880`/`≤600`) and bottom-sheet paths
+  now fill the content area. Atlas-domain map tokens (§6) unchanged.
+
+- **Unified empty/loading/error states.** New shared component
+  `src/lib/components/FeatureState.svelte` mirrors the Sheet's empty look. Sheet,
+  Calendar, Deeds, and Notes now render those states at the component root
+  (outside the max-width content wrappers that previously narrowed Calendar/
+  Deeds/Notes), so every tab presents them identically. Per-feature dead `.empty`
+  CSS removed.
+
+- **Landing page copy.** `src/routes/+page.svelte` now reflects reality: all five
+  sections are live and linked (was the Phase 0 "Being bound" placeholder).
+
+- **Offline sample-vessel preview (TEMPORARY, dev-only aid).**
+  `src/lib/core/demoVessel.js` lets you click through Sheet/Calendar/Deeds/Notes
+  locally with no backend. It is **only active when `isSupabaseConfigured` is
+  false**, it **never writes** (offline saves already no-op), and it is inert the
+  moment real keys are set. It is intentionally easy to delete: the file plus
+  five tagged `DEMO-PREVIEW` spots (one per feature data layer's offline branch,
+  and the button in `routes/+layout.svelte`). Remove it before/after cut-over at
+  your leisure — leaving it in is harmless online.

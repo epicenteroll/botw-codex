@@ -12,6 +12,7 @@
   // shares the vessel's sheet_data blob with the sheet, so saves MERGE.
 
   import { vesselId } from '$lib/core/session.js'
+  import FeatureState from '$lib/components/FeatureState.svelte'
   import { pushToast } from '$lib/core/toast.js'
   import { debounce } from '$lib/core/utils.js'
   import { blankCalendar, loadCalendar, saveCalendar } from './calendarData.js'
@@ -146,17 +147,16 @@
 
 <svelte:head><title>Blood of the World — Calendar</title></svelte:head>
 
-<div class="calendar">
-  {#if !currentVesselId}
-    <div class="empty">
-      <h2>No vessel summoned</h2>
-      <p>Select a character vessel from the bar above to open its timeline.</p>
-    </div>
-  {:else if loading}
-    <div class="empty"><p>Aligning the chronological matrix…</p></div>
-  {:else if loadError}
-    <div class="empty"><h2>Could not load</h2><p>{loadError}</p></div>
-  {:else}
+{#if !currentVesselId}
+  <FeatureState
+    title="No vessel summoned"
+    message="Select a character vessel from the bar above to open its timeline." />
+{:else if loading}
+  <FeatureState message="Aligning the chronological matrix…" />
+{:else if loadError}
+  <FeatureState title="Could not load" message={loadError} />
+{:else}
+  <div class="calendar">
     <div class="savebar" data-state={saveState}>
       {#if saveState === 'saving'}Saving…{:else if saveState === 'saved'}All changes saved{:else if saveState === 'error'}Save failed — will retry on next edit{/if}
     </div>
@@ -264,8 +264,8 @@
         </p>
       </div>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
   .calendar {
@@ -292,8 +292,8 @@
     margin: 0 auto;
     overflow-y: auto;
   }
-  .empty { text-align: center; color: var(--mut); padding: 60px 20px; }
-  .empty h2 { font-family: var(--font-display); color: var(--tx); }
+  /* Empty / loading / error states now use the shared FeatureState component
+     ($lib/components/FeatureState.svelte) — task D. */
 
   .savebar { font-size: 11px; color: var(--mut); height: 16px; margin-bottom: 6px; text-align: right; }
   .savebar[data-state='saved'] { color: var(--green); }

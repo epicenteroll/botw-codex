@@ -1,17 +1,17 @@
 <script>
   // Home / landing.
   //
-  // Phase 0 placeholder: the unified shell, auth, and most sections don't exist
-  // yet. Atlas is the one live section; the rest are listed as forthcoming so
-  // the scaffold reads honestly. Styles are component-scoped (the atlas's global
-  // app.css only loads on /atlas) and use the world's tokens directly.
+  // All sections are built now (Phases 1–3 complete): the unified shell, auth,
+  // and the Sheet / Calendar / Deeds / Notes / Atlas features all exist, so each
+  // tile links to its live route. Styles are component-scoped (the atlas's
+  // global app.css only loads on /atlas) and use the world's tokens directly.
   import { base } from '$app/paths'
   const sections = [
     { name: 'Atlas', href: '/atlas', blurb: 'The world map and encyclopedia.', live: true },
-    { name: 'Sheet', href: null, blurb: 'Attributes, skills, combat, inventory, corruption.', live: false },
-    { name: 'Calendar', href: null, blurb: 'Epoch, months, weeks, crucibles.', live: false },
-    { name: 'Deeds', href: null, blurb: 'The registry of deeds.', live: false },
-    { name: 'Notes', href: null, blurb: 'World chronicles.', live: false },
+    { name: 'Sheet', href: '/sheet', blurb: 'Attributes, skills, combat, inventory, corruption.', live: true },
+    { name: 'Calendar', href: '/calendar', blurb: 'Epoch, months, weeks, crucibles.', live: true },
+    { name: 'Deeds', href: '/deeds', blurb: 'The registry of deeds.', live: true },
+    { name: 'Notes', href: '/notes', blurb: 'World chronicles.', live: true },
   ]
 </script>
 
@@ -24,8 +24,9 @@
     <p class="eyebrow">The Codex</p>
     <h1>Blood of the World</h1>
     <p class="lede">
-      One book for the world and the people who walk it. The atlas is charted;
-      the rest of the codex is being bound.
+      One book for the world and the people who walk it. The atlas is charted,
+      and the sheet, calendar, deeds, and chronicles are bound — open any of them
+      below.
     </p>
   </header>
 
@@ -48,7 +49,7 @@
   </nav>
 
   <footer>
-    <span>Phase 0 — scaffold</span>
+    <span>The codex is bound — sign in from the bar above to summon a vessel.</span>
   </footer>
 </main>
 

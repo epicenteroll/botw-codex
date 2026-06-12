@@ -30,6 +30,7 @@
   import { vesselId, isAdmin } from '$lib/core/session.js'
   import { pushToast } from '$lib/core/toast.js'
   import { debounce } from '$lib/core/utils.js'
+  import FeatureState from '$lib/components/FeatureState.svelte'
   import {
     blankPersonal, blankGlobal, loadDeeds, savePersonalDeeds, saveGlobalTriumphs,
   } from './deedsData.js'
@@ -238,12 +239,12 @@
 
 <svelte:head><title>Blood of the World — Deeds</title></svelte:head>
 
-<div class="deeds">
-  {#if loading}
-    <div class="empty"><p>Consulting the Registry of Deeds…</p></div>
-  {:else if loadError}
-    <div class="empty"><h2>Could not load</h2><p>{loadError}</p></div>
-  {:else}
+{#if loading}
+  <FeatureState message="Consulting the Registry of Deeds…" />
+{:else if loadError}
+  <FeatureState title="Could not load" message={loadError} />
+{:else}
+  <div class="deeds">
     <div class="savebar" data-state={saveState}>
       {#if saveState === 'saving'}Saving…{:else if saveState === 'saved'}All changes saved{:else if saveState === 'error'}Save failed — will retry on next edit{/if}
     </div>
@@ -440,8 +441,8 @@
         </div>
       </section>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
   .deeds {
@@ -460,8 +461,8 @@
     margin: 0 auto;
     overflow-y: auto;
   }
-  .empty { text-align: center; color: var(--mut); padding: 60px 20px; }
-  .empty h2 { font-family: var(--font-display); color: var(--tx); }
+  /* Empty / loading / error states now use the shared FeatureState component
+     ($lib/components/FeatureState.svelte) — task D. */
 
   .savebar { font-size: 11px; color: var(--mut); height: 16px; margin-bottom: 6px; text-align: right; }
   .savebar[data-state='saved'] { color: var(--green); }

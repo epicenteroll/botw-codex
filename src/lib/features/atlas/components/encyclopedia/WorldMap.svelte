@@ -3,19 +3,21 @@
   import { createEventDispatcher } from 'svelte'
   import { isAdmin } from '$lib/core/session.js'
   import { entities, discoveries } from '../../lib/dataLayer.js'
-  import { byId, displayLevel, tierClass, tierLabel } from '../../lib/domain.js'
+  import { displayLevel, tierClass, tierLabel } from '../../lib/domain.js'
   import { blobPath } from '../../lib/utils.js'
 
   export let selectedId = null
   const dispatch = createEventDispatcher()
 
-  $: cont = byId($entities, 'impure-fracta')
-  $: lv = tierClass(displayLevel($entities, $discoveries, 'impure-fracta', $isAdmin))
+  $: cont = $entities.find((e) => e.entity_type === 'continent')
+  $: contId = cont ? cont.id : null
+  $: lv = contId ? tierClass(displayLevel($entities, $discoveries, contId, $isAdmin)) : 'unknown'
   $: d = blobPath(470, 360, 235, cont ? (cont.blob_seed || 'impure-fracta') : 'impure-fracta')
 
   function enter() {
-    dispatch('select', { id: 'impure-fracta' })
-    dispatch('enter', { view: 'continent', id: 'impure-fracta' })
+    if (!contId) return
+    dispatch('select', { id: contId })
+    dispatch('enter', { view: 'continent', id: contId })
   }
   function keyActivate(evt) {
     if (evt.key === 'Enter' || evt.key === ' ') {
@@ -35,9 +37,9 @@
   <text x="858" y="120" class="water-label">Mushroom Expanse</text>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <g class="map-region {lv} can-enter"
-    class:selected={selectedId === 'impure-fracta'}
+    class:selected={selectedId === contId}
     role="button" tabindex="0"
-    aria-label="The Impure Fracta, {tierLabel(cont, displayLevel($entities, $discoveries, 'impure-fracta', $isAdmin))}"
+    aria-label="The Impure Fracta, {tierLabel(cont, contId ? displayLevel($entities, $discoveries, contId, $isAdmin) : 0)}"
     on:click={enter} on:keydown={keyActivate}>
     <path class="region-glow" d={d} />
     <path class="region-fill" d={d} />

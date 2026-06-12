@@ -15,16 +15,24 @@
   export let selectedId = null
   const dispatch = createEventDispatcher()
 
+  // Resolve the continent + the Road by TYPE, not by a hardcoded text id.
+  // Offline (seed.json) their ids are slugs ('impure-fracta' / 'ancient-holy-road');
+  // in Supabase they are UUIDs. Finding them by entity_type works in both.
+  $: continent = $entities.find((e) => e.entity_type === 'continent')
+  $: corridor = $entities.find((e) => e.entity_type === 'corridor')
+
   let svgEl
   let placing = false
   let overlapIds = new Set()
   let overlapTimer
 
   $: editing = $mapEditMode && $isAdmin
-  $: quads = ($isAdmin ? allChildrenOf($entities, 'impure-fracta') : childrenOf($entities, 'impure-fracta'))
+  $: quads = (continent
+    ? ($isAdmin ? allChildrenOf($entities, continent.id) : childrenOf($entities, continent.id))
+    : [])
     .filter((e) => e.entity_type === 'quadrant' && Array.isArray(e.blob_center))
-  $: ahr = byId($entities, 'ancient-holy-road')
-  $: ahrLv = ahr ? tierClass(displayLevel($entities, $discoveries, 'ancient-holy-road', $isAdmin)) : 'unknown'
+  $: ahr = corridor
+  $: ahrLv = ahr ? tierClass(displayLevel($entities, $discoveries, ahr.id, $isAdmin)) : 'unknown'
 
   const AHR_D = 'M500,60 C 505,160 470,250 560,330 C 650,410 660,500 615,560 C 595,620 600,650 612,668'
   const lvOf = (id) => tierClass(displayLevel($entities, $discoveries, id, $isAdmin))
@@ -43,9 +51,9 @@
     }
   }
   function enterAHR() {
-    if (editing || placing) return
-    dispatch('select', { id: 'ancient-holy-road' })
-    dispatch('enter', { view: 'corridor', id: 'ancient-holy-road' })
+    if (editing || placing || !ahr) return
+    dispatch('select', { id: ahr.id })
+    dispatch('enter', { view: 'corridor', id: ahr.id })
   }
 
   // ----- C2: click-to-place a new quadrant -----
@@ -55,7 +63,7 @@
     placing = false
     dispatch('quickadd', {
       entityType: 'quadrant',
-      parentId: 'impure-fracta',
+      parentId: continent ? continent.id : null,
       level: 'continent',
       blobCenter: [Math.round(pt.x), Math.round(pt.y)],
       clientX: evt.clientX,

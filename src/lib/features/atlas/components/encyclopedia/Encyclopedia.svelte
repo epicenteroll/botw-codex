@@ -88,8 +88,8 @@
     if (e.entity_type === 'location') { v = 'sector'; f = e.parent_id }
     else if (e.entity_type === 'waypoint') { v = 'corridor'; f = e.parent_id }
     else if (e.entity_type === 'sector') { v = 'quadrant'; f = e.parent_id }
-    else if (e.entity_type === 'quadrant') { v = 'continent'; f = 'impure-fracta' }
-    else if (e.entity_type === 'corridor') { v = 'continent'; f = 'impure-fracta' }
+    else if (e.entity_type === 'quadrant') { v = 'continent'; f = e.parent_id }
+    else if (e.entity_type === 'corridor') { v = 'continent'; f = e.parent_id }
     else if (e.entity_type === 'continent') { v = 'world'; f = null }
     // people/faction/role/item: no map — keep current view, just open the panel
     go({ tab: 'atlas', view: v, focusId: f, selectedId: id })
@@ -180,8 +180,13 @@
   // ----- breadcrumb -----
   $: crumb = (() => {
     const path = [{ label: 'The World', view: 'world', id: null }]
+    const continent = $entities.find((e) => e.entity_type === 'continent')
     if (['continent', 'quadrant', 'sector', 'corridor'].includes(view))
-      path.push({ label: 'The Impure Fracta', view: 'continent', id: 'impure-fracta' })
+      path.push({
+        label: continent ? continent.name : 'The Impure Fracta',
+        view: 'continent',
+        id: continent ? continent.id : null,
+      })
     if (view === 'quadrant' || view === 'sector') {
       const q = view === 'quadrant'
         ? byId($entities, focusId)

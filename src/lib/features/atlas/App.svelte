@@ -53,7 +53,9 @@
 
 <style>
   /* Fill the layout's content area instead of forcing full-viewport height, so
-     the atlas sits correctly below the shared auth bar + nav. */
-  .atlas-host { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+     the atlas sits correctly below the shared auth bar + nav. flex:1 fills when
+     the parent is a flex column (the shell now sets that); height:100% covers
+     the plain-block fallback. */
+  .atlas-host { flex: 1 1 auto; height: 100%; display: flex; flex-direction: column; min-height: 0; }
   .loading { margin: auto; display: flex; flex-direction: column; gap: 12px; align-items: center; max-width: 320px; width: 100%; padding: 40px 16px; }
 </style>

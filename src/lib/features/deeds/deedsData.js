@@ -33,6 +33,7 @@
 // value for the keys it owns and merges them over the re-fetched blob.
 
 import { supabase, isSupabaseConfigured } from '$lib/core/supabase.js'
+import { isDemoId, demoBlob, demoGlobalBlob } from '$lib/core/demoVessel.js' // DEMO-PREVIEW (offline only)
 import { AP_DEFAULT } from './rules.js'
 
 export const GLOBAL_NAME = '__GLOBAL_CAMPAIGN__'
@@ -112,6 +113,15 @@ export async function loadDeeds(id) {
   // Offline / demo: everything blank, and pretend the global row exists so the
   // demo's add-triumph button works without a backend.
   if (!isSupabaseConfigured || !supabase) {
+    // DEMO-PREVIEW (offline only) — task B; delete this block to remove.
+    if (isDemoId(id)) {
+      return {
+        ok: true,
+        personal: personalFromBlob(demoBlob()),
+        global: globalFromBlob(demoGlobalBlob()),
+        globalExists: true,
+      }
+    }
     return { ok: true, personal: blankPersonal(), global: blankGlobal(), globalExists: true }
   }
 

@@ -26,6 +26,7 @@
 // live save expects.
 
 import { supabase, isSupabaseConfigured } from '$lib/core/supabase.js'
+import { isDemoId, demoBlob } from '$lib/core/demoVessel.js' // DEMO-PREVIEW (offline only)
 import { DEFAULTS, TRANSITION_DEFAULT, ensureCrucible } from './rules.js'
 
 export const GLOBAL_NAME = '__GLOBAL_CAMPAIGN__'
@@ -91,7 +92,11 @@ export function toBlob(calendar, existing = {}) {
 // loadCalendar — read one vessel's blob and return it as a calendar object.
 // Same shape and guards as the sheet's loadSheet.
 export async function loadCalendar(id) {
-  if (!isSupabaseConfigured || !supabase) return { ok: true, calendar: blankCalendar(), raw: {} }
+  if (!isSupabaseConfigured || !supabase) {
+    // DEMO-PREVIEW (offline only) — task B; delete this block to remove.
+    if (isDemoId(id)) { const raw = demoBlob(); return { ok: true, calendar: fromBlob(raw), raw } }
+    return { ok: true, calendar: blankCalendar(), raw: {} }
+  }
   if (!id) return { error: 'No vessel selected.' }
   const { data, error } = await supabase
     .from('character_vessels')

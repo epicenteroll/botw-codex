@@ -19,6 +19,7 @@
 // load/save boundary.
 
 import { supabase, isSupabaseConfigured } from '$lib/core/supabase.js'
+import { isDemoId, demoBlob } from '$lib/core/demoVessel.js' // DEMO-PREVIEW (offline only)
 
 export const GLOBAL_NAME = '__GLOBAL_CAMPAIGN__'
 
@@ -61,7 +62,11 @@ export function notesToBlob(notes, existing = {}) {
 // loadNotes — read one vessel's blob and return its notes array. Same shape and
 // guards as the calendar's loadCalendar. Returns { ok, notes, raw } or { error }.
 export async function loadNotes(id) {
-  if (!isSupabaseConfigured || !supabase) return { ok: true, notes: blankNotes(), raw: {} }
+  if (!isSupabaseConfigured || !supabase) {
+    // DEMO-PREVIEW (offline only) — task B; delete this block to remove.
+    if (isDemoId(id)) { const raw = demoBlob(); return { ok: true, notes: notesFromBlob(raw), raw } }
+    return { ok: true, notes: blankNotes(), raw: {} }
+  }
   if (!id) return { error: 'No vessel selected.' }
   const { data, error } = await supabase
     .from('character_vessels')

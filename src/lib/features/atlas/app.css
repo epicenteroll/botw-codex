@@ -66,8 +66,10 @@
   .map-region:focus-visible{outline:none}
   .map-region:focus-visible .region-edge{stroke:var(--gold-bright)}
 
-  /* ---- top bar ---- */
-  header{display:flex;align-items:center;gap:18px;padding:12px 20px;border-bottom:1px solid var(--border-color);
+  /* ---- top bar ---- (SCOPED to .atlas-host — the atlas no longer renders its
+     own header inside the Codex, so this is inert now; scoping guarantees it can
+     never restyle the shell's <header class="topbar">.) */
+  .atlas-host header{display:flex;align-items:center;gap:18px;padding:12px 20px;border-bottom:1px solid var(--border-color);
     background:linear-gradient(180deg,#0f0c14, #0a0a0f);flex:0 0 auto;z-index:5;flex-wrap:wrap}
   .brand{display:flex;flex-direction:column;line-height:1}
   .brand .t{font-family:'Cinzel';font-weight:700;font-size:18px;color:var(--gold-bright);text-transform:uppercase;letter-spacing:.12em}
@@ -102,8 +104,15 @@
     min-height:44px;white-space:nowrap}
   .tabs button.on{color:var(--gold-bright);border-bottom-color:var(--gold-bright)}
 
-  /* ---- main ---- */
-  main{flex:1;display:flex;min-height:0}
+  /* ---- main ----
+     SCOPED to .atlas-host (task C). These were bare element selectors (`main`,
+     `header`, `aside`) when the atlas owned the whole page. Inside the unified
+     Codex the shell also uses <main class="content"> and <header class="topbar">,
+     so the bare `main{display:flex}` leaked onto the shell's content area and
+     turned it into a horizontal flex row — collapsing the atlas into a narrow
+     column on the left. Scoping under .atlas-host (App.svelte's wrapper) keeps
+     these rules to the atlas only. */
+  .atlas-host main{flex:1;display:flex;min-height:0}
   .stage{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;padding:14px 20px 20px}
   .crumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;min-height:26px}
   .crumb a,.crumb button.bc{color:var(--text-muted);cursor:pointer;font-size:14px;letter-spacing:.04em;
@@ -288,8 +297,8 @@
   .mapwrap.hi-contrast .hint{color:#a8a8b4}
   .mapwrap.hi-contrast .water-label{fill:#6b93a8}
 
-  /* ---- detail panel (desktop aside) ---- */
-  aside{flex:0 0 392px;border-left:1px solid var(--border-color);background:linear-gradient(180deg,#0e0e15,#0a0a0f);
+  /* ---- detail panel (desktop aside) ---- (SCOPED to .atlas-host — task C) */
+  .atlas-host aside{flex:0 0 392px;border-left:1px solid var(--border-color);background:linear-gradient(180deg,#0e0e15,#0a0a0f);
     display:flex;flex-direction:column;min-height:0}
   .panel-empty{margin:auto;text-align:center;color:#4a4a55;padding:40px;max-width:260px}
   .panel-empty .em{font-family:'Cinzel';font-size:14px;letter-spacing:.1em;color:#5b5b66}
@@ -440,9 +449,9 @@
   @media (max-width:880px){
     /* the old rule deleted the panel entirely; the <aside> is now replaced by
        the PanelSheet component in Encyclopedia.svelte — keep this only as a
-       safety net for any stray aside. */
-    aside{display:none}
-    header{padding:10px 14px;gap:10px}
+       safety net for any stray aside. (SCOPED to .atlas-host — task C.) */
+    .atlas-host aside{display:none}
+    .atlas-host header{padding:10px 14px;gap:10px}
     .stage{padding:10px 12px calc(76px + var(--safe-bottom))}
     .tabs{padding:6px 12px 0}
     .placard{max-width:72%}

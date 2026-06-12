@@ -17,6 +17,7 @@
 // is strictly safer and still a valid blob for the live loader.
 
 import { supabase, isSupabaseConfigured } from '$lib/core/supabase.js'
+import { isDemoId, demoBlob } from '$lib/core/demoVessel.js' // DEMO-PREVIEW (offline only)
 import { combatProficiencyCurrent, inventoryMax, critMarkers } from './rules.js'
 
 export const GLOBAL_NAME = '__GLOBAL_CAMPAIGN__'
@@ -160,7 +161,11 @@ export function toBlob(sheet, existing = {}) {
 
 // loadSheet — read one vessel's blob and return it as a sheet object.
 export async function loadSheet(id) {
-  if (!isSupabaseConfigured || !supabase) return { ok: true, sheet: blankSheet(), raw: {} }
+  if (!isSupabaseConfigured || !supabase) {
+    // DEMO-PREVIEW (offline only) — task B; delete this block to remove.
+    if (isDemoId(id)) { const raw = demoBlob(); return { ok: true, sheet: fromBlob(raw), raw } }
+    return { ok: true, sheet: blankSheet(), raw: {} }
+  }
   if (!id) return { error: 'No vessel selected.' }
   const { data, error } = await supabase
     .from('character_vessels')

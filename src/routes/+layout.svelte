@@ -35,6 +35,7 @@
     selectVessel,
   } from '$lib/core/vessels.js'
   import { toasts, pushToast, dismissToast } from '$lib/core/toast.js'
+  import { demoActive, toggleDemo } from '$lib/core/demoVessel.js' // DEMO-PREVIEW (offline only)
 
   // Top-level sections. Only the ones with an `href` are routes that exist
   // today; the rest are honest placeholders until Phase 2 builds them.
@@ -166,6 +167,12 @@
       {#if !isSupabaseConfigured}
         <span class="pill muted" title="Set VITE_SUPABASE_URL / _ANON_KEY in .env.local to enable login"
           >Demo / offline — no backend keys set</span>
+        <!-- DEMO-PREVIEW (offline only) — task B; lets you click through the
+             feature pages with a sample vessel. No backend, never saves.
+             Delete this button (and the demoVessel import) to remove. -->
+        <button class="btn" class:primary={$demoActive} on:click={toggleDemo}>
+          {$demoActive ? 'Exit sample vessel' : 'Preview sample vessel'}
+        </button>
       {:else if !$authReady}
         <span class="pill muted">Connecting…</span>
       {:else if !$session}
@@ -439,6 +446,11 @@
   }
   .content.atlas {
     overflow: hidden;
+    /* Host the atlas as a full-size flex column so it fills the content area's
+       width AND height at every breakpoint (task C). Pairs with the atlas's
+       now-scoped layout selectors in features/atlas/app.css. */
+    display: flex;
+    flex-direction: column;
   }
 
   .toast-stack {

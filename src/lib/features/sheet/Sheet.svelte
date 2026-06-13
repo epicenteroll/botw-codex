@@ -481,6 +481,8 @@
     font-family: var(--font-ui);
     color: var(--tx);
     padding: 14px;
+    max-width: 1200px;
+    margin: 0 auto;
     overflow-y: auto;
   }
   /* Empty / loading / error states now use the shared FeatureState component

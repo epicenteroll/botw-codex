@@ -276,8 +276,10 @@
   .codex {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
+    /* Fill the locked html/body (height:100% below). Using a stable 100% chain
+       instead of 100vh/100dvh avoids the dynamic-viewport recompute glitch that
+       a manual resize/zoom was correcting (the layout that loaded cropped). */
+    height: 100%;
     overflow: hidden;
     background: var(--bg);
     color: var(--text);

@@ -28,16 +28,34 @@
 .botw-sheet .field{display:flex; flex-direction:column; gap:3px}
 .botw-sheet .field>span{font-size:9px; text-transform:uppercase; color:var(--muted); letter-spacing:.4px}
 .botw-sheet .gold{color:var(--gold-bright)}
-.botw-sheet .grid{column-count:2; column-gap:12px}
+/* Two-column card layout. Ported from the prototype's CSS multi-column model
+   (column-count:2) to CSS Grid. Multicol balances content into a height-bounded
+   formatting context that (a) overlaps/clips on narrow viewports and inside the
+   app's internal scroller instead of growing as a normal block, and (b) fails to
+   re-flow/repaint after a client-side route remount (the "folds/compacts after a
+   tab switch" bug). A grid is a normal block-level box: it grows with content
+   (so .content scrolls), reflows cleanly on remount, and drops to one column on
+   small screens. Desktop keeps the two columns; .wide/.band cards still span the
+   full width. align-items:start lets each card keep its natural height (no
+   stretched empty cards). */
+.botw-sheet .grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; align-items:start}
 .botw-sheet .col{display:contents}
-.botw-sheet .c3, .botw-sheet .c4, .botw-sheet .c5, .botw-sheet .c8{break-inside:avoid}
-.botw-sheet .card.wide, .botw-sheet .card.band{column-span:all}
+.botw-sheet .card.wide, .botw-sheet .card.band{grid-column:1 / -1}
 @media(max-width:680px){
-  .botw-sheet .grid{column-count:1}
-  .botw-sheet .hdr-left{grid-template-columns:1fr}
+  /* Phones / tablets in portrait: a single stacked column that scrolls. */
+  .botw-sheet .grid{grid-template-columns:1fr}
+  .botw-sheet .hdr-left{grid-template-columns:1fr; min-width:0}
+  /* The Proficiencies table (.card.band) has fixed-pixel columns that exceed a
+     phone's width; let just that card scroll horizontally rather than overflow
+     the page. */
+  .botw-sheet .card.band{overflow-x:auto}
+  .botw-sheet .prof-head, .botw-sheet .prof-row{min-width:420px}
 }
-.botw-sheet .card{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:12px; break-inside:avoid; margin-bottom:12px}
-.botw-sheet .card.wide{column-span:all}
+.botw-sheet .card{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:12px; break-inside:avoid}
+/* Spacing between cards is owned by the grid `gap`; the legacy per-card
+   margin-bottom would double it (and leave a stray gap below the last row). */
+.botw-sheet .grid>.card{margin-bottom:0}
+.botw-sheet .card.wide{grid-column:1 / -1}
 .botw-sheet .card-title{font-family:var(--font-display); font-weight:600; font-size:16px; margin:0 0 8px;
   display:flex; align-items:center; justify-content:space-between; gap:8px}
 .botw-sheet .card-title small{font-size:9px; text-transform:uppercase; color:var(--muted); font-family:var(--font-ui); font-weight:400}

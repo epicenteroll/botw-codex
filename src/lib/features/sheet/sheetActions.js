@@ -281,8 +281,8 @@ export function makeActions({ sheet, terminal, transient }) {
   const addDeed = (text, ap) => mut((s) => { (s.deeds ||= []).push({ title: text, desc: '', apValue: parseInt(ap, 10) || 0, isGlobal: false, claimed: false }) })
   const toggleDeed = (i) => mut((s) => { const d2 = s.deeds[i]; d2.claimed = !d2.claimed; s.advancementPoints = Math.max(0, (parseInt(s.advancementPoints, 10) || 0) + (d2.claimed ? d2.apValue : -d2.apValue)) })
   const delDeed = (i) => mut((s) => { const d2 = s.deeds[i]; if (d2.claimed) s.advancementPoints = Math.max(0, (parseInt(s.advancementPoints, 10) || 0) - d2.apValue); s.deeds.splice(i, 1) })
-  const sendDeedToNotes = (i) => { const d2 = S().deeds[i]; addNote('Deed', d2.title, `Reward: +${d2.apValue} AP`) }
-  const sendVisionToNotes = () => { const v = tr().lastVision; if (v) addNote('Vision', `${v.q || 'Vision sought'} — rolled ${v.roll}`, '') }
+  const sendDeedToNotes = (i) => { const d2 = S().deeds[i]; addNote('lore', d2.title, `Reward: +${d2.apValue} AP`) }
+  const sendVisionToNotes = () => { const v = tr().lastVision; if (v) addNote('lore', `${v.q || 'Vision sought'} — rolled ${v.roll}`, '') }
 
   return {
     adj, setAttr, toggle, useLuck,

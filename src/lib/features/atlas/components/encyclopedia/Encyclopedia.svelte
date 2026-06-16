@@ -25,6 +25,7 @@
   import PanelSheet from './PanelSheet.svelte'
   import EncyclopediaIndex from './EncyclopediaIndex.svelte'
   import AdminEncyclopedia from './AdminEncyclopedia.svelte'
+  import AdminImport from './AdminImport.svelte'
   import AdminQuickAdd from './AdminQuickAdd.svelte'
 
   const dispatch = createEventDispatcher()
@@ -320,6 +321,7 @@
     {:else if tab === 'index'}
       <EncyclopediaIndex on:go={(e) => goToEntity(e.detail)} />
     {:else if tab === 'admin'}
+      <AdminImport />
       <AdminEncyclopedia
         bind:openId={adminEditId}
         on:go={(e) => goToEntity(e.detail)}

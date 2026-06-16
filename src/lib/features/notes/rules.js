@@ -27,18 +27,55 @@
 //    order the sidebar lists them; switchActiveLedgerBook('personal'|'quest'|
 //    'knowledge'|'campaign')). `key` is the value stored in each note's
 //    `category`; `label` is the sidebar volume name. ──────────────────────────
+// ── Book volumes. Re-vocabularied to mirror the encyclopedia's entity types so
+//    a captured note maps cleanly to a codex entry, plus an "Unsorted" catch-all.
+//    IMPORTANT (monolith-safe): we do NOT rename the values stored in each note's
+//    `category`. A note keeps whatever category string it was saved with; we only
+//    NORMALISE it to one of these display books at read time (normalizeCategory).
+//    So the live monolith — which still groups by its own personal/quest/
+//    knowledge/campaign keys — keeps showing its notes unchanged, and nothing a
+//    player saved here ever disappears (an unknown category lands in Unsorted). ──
 export const BOOKS = [
-  { key: 'personal', label: 'Personal Journal' },
-  { key: 'quest', label: 'Quest Ledger' },
-  { key: 'knowledge', label: 'Knowledge File' },
-  { key: 'campaign', label: 'Campaign Log' },
+  { key: 'person', label: 'People' },
+  { key: 'faction', label: 'Factions' },
+  { key: 'place', label: 'Places' },
+  { key: 'region', label: 'Regions' },
+  { key: 'item', label: 'Items' },
+  { key: 'lore', label: 'Lore & Events' },
+  { key: 'unsorted', label: 'Unsorted' },
 ]
 
-// The four category keys, in order (live: the keys of the `counts` object).
+// The category keys, in order (used to seed the badge-count tally).
 export const BOOK_KEYS = BOOKS.map((b) => b.key)
 
-// The book a fresh workspace opens on (live: activeLedgerCategoryBook = "personal").
-export const DEFAULT_BOOK = 'personal'
+// The book a fresh workspace opens on.
+export const DEFAULT_BOOK = 'person'
+
+// normalizeCategory — map ANY stored category onto one of the display books.
+// Covers the new keys (pass-through), the sheet quick-capture vocabulary
+// (NPC/Location/…), and the legacy monolith book keys (personal/quest/…).
+// Unknown/missing → 'unsorted', so a note is ALWAYS visible somewhere. This is
+// what fixes the old bug where a sheet note saved under e.g. "NPC" showed in no
+// book at all. Display-only: the stored value is never rewritten by this.
+const CATEGORY_ALIASES = {
+  person: 'person', faction: 'faction', place: 'place', region: 'region', item: 'item',
+  lore: 'lore', unsorted: 'unsorted',
+  // sheet quick-capture (old NOTE_CATS)
+  npc: 'person', location: 'place', monster: 'lore', reagent: 'item', material: 'item',
+  knowledge: 'lore', vision: 'lore', deed: 'lore', other: 'unsorted',
+  // legacy monolith book keys
+  personal: 'unsorted', quest: 'lore', campaign: 'lore',
+}
+export function normalizeCategory(cat) {
+  const k = String(cat ?? '').trim().toLowerCase()
+  return CATEGORY_ALIASES[k] || 'unsorted'
+}
+
+// Map a display book key → the encyclopedia entity_type a submission proposes.
+export const BOOK_TO_ENTITY_TYPE = {
+  person: 'people', faction: 'faction', place: 'location', region: 'sector',
+  item: 'item', lore: 'lore_entry', unsorted: 'lore_entry',
+}
 
 // The pointer's "nothing selected" sentinel (live: activeLedgerPagePointerIndex
 // starts at -1, and the loader resets it to -1 for an empty book).
@@ -61,18 +98,18 @@ export function pageLabel(title) {
 // so binding to an element edits the underlying note.
 export function pagesInBook(notes, book) {
   const list = Array.isArray(notes) ? notes : []
-  return list.filter((n) => n && n.category === book)
+  return list.filter((n) => n && normalizeCategory(n.category) === book)
 }
 
-// bookCounts — the badge numbers (live: a { personal, quest, knowledge,
-// campaign } tally that increments only for categories it already knows —
-// `if (counts[note.category] !== undefined)`). Notes with an unknown/missing
-// category are intentionally not counted (and show in no book), exactly as live.
+// bookCounts — the badge numbers. Every note is normalised into a known book,
+// so unlike the old tally (which silently dropped unknown categories) nothing is
+// uncounted — a sheet "NPC"/"Vision"/etc. note now lands in People/Lore/Unsorted.
 export function bookCounts(notes) {
-  const counts = { personal: 0, quest: 0, knowledge: 0, campaign: 0 }
+  const counts = {}
+  BOOK_KEYS.forEach((k) => (counts[k] = 0))
   const list = Array.isArray(notes) ? notes : []
   list.forEach((note) => {
-    if (note && counts[note.category] !== undefined) counts[note.category]++
+    if (note) counts[normalizeCategory(note.category)]++
   })
   return counts
 }
@@ -98,7 +135,7 @@ export function virtualToReal(notes, book, virtualIdx) {
   const list = Array.isArray(notes) ? notes : []
   let targetCounter = 0
   for (let i = 0; i < list.length; i++) {
-    if (list[i] && list[i].category === book) {
+    if (list[i] && normalizeCategory(list[i].category) === book) {
       if (targetCounter === virtualIdx) return i
       targetCounter++
     }

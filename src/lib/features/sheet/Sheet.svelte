@@ -21,6 +21,7 @@
   import { loadNotes, saveNotes } from '$features/notes/notesData.js'
   import { loadDeeds, savePersonalDeeds } from '$features/deeds/deedsData.js'
   import { makeActions } from './sheetActions.js'
+  import { masonry } from './masonry.js'
   import { CTX } from './cards/context.js'
   import './sheet-theme.css'
 
@@ -166,7 +167,7 @@
 
     <IdentityHeader />
 
-    <div class="grid">
+    <div class="grid" use:masonry>
       <SuccessGritCard />
       <AttributesSkillsCard />
       <SigilsCard />

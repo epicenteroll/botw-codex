@@ -8,6 +8,7 @@
 // Absence of a key means "unknown" (no row, in DB terms).
 
 import { s } from './utils.js'
+import { resolveLinkTarget } from './linkResolve.js'
 
 export const ENTITY_TYPE_NAMES = {
   continent: 'Continent',
@@ -106,24 +107,28 @@ export function unlocked(entities, disc, entity, isAdmin) {
   return set
 }
 
-// ---------- name-link parsing [[Label|id]] (discovery-aware, Section 12) ----------
-// A link resolves to a clickable span ONLY if its target is discovered
-// (heard_of+) or the viewer is admin; otherwise it renders as plain prose so
-// undiscovered names never leak. Prose around links is always sanitised first.
+// ---------- name-link parsing (discovery-aware, Section 12) ----------
+// Accepts BOTH the explicit form [[Label|target]] and the bare form [[Name]]
+// (the way the GM writes raw notes). `target` is resolved to an entity by id,
+// slug, or name (resolveLinkTarget), and the clickable span carries the entity's
+// REAL id in data-go so navigation works in Supabase mode (where ids are UUIDs
+// but lore targets are slugs — the parked cross-link bug). A link renders as a
+// clickable span ONLY if its target is discovered (heard_of+) or the viewer is
+// admin; otherwise it falls back to plain prose so undiscovered names never leak.
 export function renderLore(text, entities, disc, isAdmin) {
   if (!text) return ''
   let out = ''
-  const re = /\[\[([^\]|]+)\|([^\]]+)\]\]/g
+  const re = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
   let last = 0,
     m
   while ((m = re.exec(text))) {
     out += s(text.slice(last, m.index))
-    const label = m[1],
-      target = m[2],
-      tEnt = byId(entities, target)
-    const visible = isAdmin || (tEnt && rawLevel(disc, target))
+    const label = m[1]
+    const target = (m[2] || m[1]).trim()
+    const tEnt = resolveLinkTarget(entities, target)
+    const visible = isAdmin || (tEnt && rawLevel(disc, tEnt.id))
     if (visible && tEnt)
-      out += `<span class="lk" data-go="${s(target)}" data-type="${s(tEnt.entity_type)}" role="link" tabindex="0">${s(label)}</span>`
+      out += `<span class="lk" data-go="${s(tEnt.id)}" data-type="${s(tEnt.entity_type)}" role="link" tabindex="0">${s(label)}</span>`
     else out += s(label)
     last = m.index + m[0].length
   }
@@ -222,40 +227,44 @@ export function markerVisibility(loc, viewLevel, lv, isAdmin) {
 }
 
 // ---------- link scanning & validation (E2) ----------
-const LINK_RE = /\[\[([^\]|]+)\|([^\]]+)\]\]/g
+const LINK_RE = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
 
 export function scanLinks(text) {
   if (!text) return []
   const out = []
   let m
   const re = new RegExp(LINK_RE.source, 'g')
-  while ((m = re.exec(text))) out.push({ label: m[1], id: m[2] })
+  while ((m = re.exec(text))) out.push({ label: m[1], id: (m[2] || m[1]).trim() })
   return out
 }
 
 const LORE_FIELDS = ['rumour', 'common_knowledge', 'uncommon_knowledge', 'rare_knowledge', 'gm_lore', 'admin_notes']
 
-/** Returns the list of link ids in an entity's lore that do not resolve. */
+/** Returns the list of link targets in an entity's lore that do not resolve. */
 export function brokenLinks(entity, entities) {
   const missing = new Set()
   LORE_FIELDS.forEach((f) => {
     scanLinks(entity[f]).forEach((l) => {
-      if (!byId(entities, l.id)) missing.add(l.id)
+      if (!resolveLinkTarget(entities, l.id)) missing.add(l.id)
     })
   })
   return [...missing]
 }
 
-/** Backlinks: every entity (or deep-lore row) whose lore references `id`. */
+/** Backlinks: every entity (or deep-lore row) whose lore resolves to `id`. */
 export function backlinksFor(entities, deepLore, id) {
-  const needle = '|' + id + ']]'
   const refs = []
+  const hits = (text) =>
+    scanLinks(text).some((l) => {
+      const r = resolveLinkTarget(entities, l.id)
+      return r && r.id === id
+    })
   for (const e of entities) {
     if (e.id === id) continue
-    if (LORE_FIELDS.some((f) => e[f] && e[f].includes(needle))) refs.push(e)
+    if (LORE_FIELDS.some((f) => e[f] && hits(e[f]))) refs.push(e)
   }
   for (const d of deepLore || []) {
-    if (d.lore_text && d.lore_text.includes(needle)) {
+    if (d.lore_text && hits(d.lore_text)) {
       const host = byId(entities, d.entity_id)
       if (host && host.id !== id && !refs.includes(host)) refs.push(host)
     }

@@ -27,11 +27,13 @@
   // deliberately no such path here, so calling it in the render path would only
   // double-escape; the safety guarantee is structural.
 
-  import { vesselId } from '$lib/core/session.js'
+  import { vesselId, isAdmin, user } from '$lib/core/session.js'
   import { pushToast } from '$lib/core/toast.js'
   import { debounce } from '$lib/core/utils.js'
   import FeatureState from '$lib/components/FeatureState.svelte'
+  import SubmissionsReview from './SubmissionsReview.svelte'
   import { blankNotes, loadNotes, saveNotes } from './notesData.js'
+  import { submitNote, mySubmissions, STATUS_LABEL } from './submissionsData.js'
   import {
     BOOKS, DEFAULT_BOOK, NO_PAGE,
     pageLabel, pagesInBook, bookCounts, clampPointer, virtualToReal,
@@ -46,6 +48,8 @@
   let loading = false
   let loadError = ''
   let saveState = 'idle' // idle | saving | saved | error
+
+  let mySubs = [] // this vessel's own note submissions (status + GM feedback)
 
   let currentVesselId = null
   $: currentVesselId = $vesselId
@@ -73,6 +77,27 @@
     }
     notes = res.notes
     ready = true
+    refreshMySubs()
+  }
+
+  // ── Submission queue (Phase B): submit the active page to the GM, and track
+  //    this vessel's own submissions so the player sees status + any feedback. ──
+  async function refreshMySubs() {
+    if (!currentVesselId) { mySubs = []; return }
+    const res = await mySubmissions(currentVesselId)
+    if (!res.error) mySubs = res.rows
+  }
+
+  async function submitActive() {
+    if (!currentVesselId || !activePage) return
+    const res = await submitNote(currentVesselId, {
+      title: activePage.title,
+      category: activePage.category,
+      content: activePage.content,
+    })
+    if (res.error) { pushToast({ msg: 'Submit failed: ' + res.error, kind: 'error' }); return }
+    pushToast({ msg: 'Sent to the GM for review.', kind: 'info' })
+    refreshMySubs()
   }
 
   // ── Autosave: when the notes array changes (after load), persist a moment
@@ -169,6 +194,10 @@
       {#if saveState === 'saving'}Saving…{:else if saveState === 'saved'}All changes saved{:else if saveState === 'error'}Save failed — will retry on next edit{/if}
     </div>
 
+    {#if $isAdmin}
+      <SubmissionsReview />
+    {/if}
+
     <section class="card">
       <div class="card-title">The World Memory Archives</div>
 
@@ -221,6 +250,7 @@
                   placeholder="Page Heading Assignment..."
                   bind:value={notes[realIndex].title}
                   on:input={touch} />
+                <button class="submit-btn" on:click={submitActive} title="Send this page to the GM for review">Submit to GM</button>
                 <button class="incinerate-btn" on:click={purgePage}>Incinerate Page</button>
               </div>
               <textarea
@@ -233,6 +263,22 @@
         </div>
       {/if}
     </section>
+
+    {#if currentVesselId && mySubs.length}
+      <section class="card mysubs">
+        <div class="card-title">My submissions</div>
+        {#each mySubs as sgo (sgo.id)}
+          <div class="mysub">
+            <span class="ms-cat">{sgo.category}</span>
+            <span class="ms-ttl">{sgo.title || '(untitled)'}</span>
+            <span class="ms-status s-{sgo.status}">{STATUS_LABEL[sgo.status] || sgo.status}</span>
+            {#if sgo.gm_feedback && sgo.status === 'changes_requested'}
+              <div class="ms-fb">GM asked: {sgo.gm_feedback}</div>
+            {/if}
+          </div>
+        {/each}
+      </section>
+    {/if}
   </div>
 {/if}
 
@@ -314,6 +360,24 @@
   .incinerate-btn { background: #4a1212; color: #ff8888; font-weight: 700; padding: 6px 12px; border: 0;
     border-radius: 4px; cursor: pointer; font-size: 12px; font-family: inherit; }
   .incinerate-btn:hover { filter: brightness(1.15); }
+
+  .submit-btn { background: #14532d; color: #86efac; font-weight: 700; padding: 6px 12px; border: 0;
+    border-radius: 4px; cursor: pointer; font-size: 12px; font-family: inherit; }
+  .submit-btn:hover { filter: brightness(1.15); }
+
+  .mysubs { margin-top: 16px; }
+  .mysub { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 0;
+    border-bottom: 1px solid var(--b); font-size: 12px; }
+  .mysub:last-child { border-bottom: 0; }
+  .ms-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+    background: rgba(255, 255, 255, .06); color: var(--mut); padding: 2px 7px; border-radius: 10px; }
+  .ms-ttl { flex: 1; min-width: 120px; color: var(--tx); }
+  .ms-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .ms-status.s-pending { background: rgba(212, 175, 55, .15); color: #e6c34d; }
+  .ms-status.s-changes_requested { background: rgba(56, 189, 248, .15); color: #38bdf8; }
+  .ms-status.s-approved { background: rgba(134, 239, 172, .13); color: #86efac; }
+  .ms-status.s-declined { background: rgba(255, 120, 120, .13); color: #ff8888; }
+  .ms-fb { flex-basis: 100%; font-size: 11px; color: #38bdf8; font-style: italic; }
 
   .ws-body { flex: 1; min-height: 400px; padding: 12px; font-size: 13px; line-height: 1.5; resize: vertical;
     color: var(--tx); background: rgba(0, 0, 0, .35); border: 1px solid var(--b); border-radius: 4px;

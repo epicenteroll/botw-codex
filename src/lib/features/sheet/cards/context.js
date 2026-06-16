@@ -13,12 +13,17 @@ export function getSheetCtx() {
   return getContext(CTX)
 }
 
-// Note categories + their colours (UI-only; the quick-capture Notes card writes
-// the chosen category straight into dynamicVesselNotes.category).
-export const NOTE_CATS = ['NPC', 'Location', 'Monster', 'Reagent', 'Material', 'Knowledge', 'Vision', 'Deed', 'Other']
+// Note categories for quick-capture — aligned with the Notes-tab books and the
+// encyclopedia entity types (people/faction/location/sector/item/lore_entry), so
+// a captured note shows in the matching Notes book and can later be submitted to
+// the codex. The <option>/chip shows NOTE_LABEL[key]; the value STORED in
+// dynamicVesselNotes.category is the key.
+export const NOTE_CATS = ['person', 'faction', 'place', 'region', 'item', 'lore']
+export const NOTE_LABEL = {
+  person: 'Person', faction: 'Faction', place: 'Place', region: 'Region', item: 'Item', lore: 'Lore / Event',
+}
 export const NOTE_COLOR = {
-  NPC: '#7dd3fc', Location: '#86efac', Monster: '#fda4af', Reagent: '#a3e635',
-  Material: '#fcd34d', Knowledge: '#c4b5fd', Vision: '#a78bfa', Deed: '#d4af37', Other: '#9ca3af',
+  person: '#7dd3fc', faction: '#fda4af', place: '#86efac', region: '#fcd34d', item: '#a3e635', lore: '#c4b5fd',
 }
 export const SKILL_LABEL = {
   endurance: 'Endurance', grip: 'Grip', reaction: 'Reaction',
